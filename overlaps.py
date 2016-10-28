@@ -74,6 +74,9 @@ class Overlaps:
                                int(duration_split[1]) * 60 +\
                                int(duration_split[2])
 
+                    if duration == 0:
+                        duration = 1
+
                     # meaningful is redefined as ratio between "meaningful" and duration
                     meaningful = float((int(meaningful_split[0]) * 3600 +
                                  int(meaningful_split[1]) * 60 +
@@ -94,6 +97,9 @@ class Overlaps:
                     duration = int(duration_split[0]) * 3600 +\
                                int(duration_split[1]) * 60 +\
                                int(duration_split[2])
+
+                    if duration == 0:
+                        duration = 1
 
                     meaningful = float((int(meaningful_split[0]) * 3600 +
                                  int(meaningful_split[1]) * 60 +

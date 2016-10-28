@@ -13,7 +13,7 @@ class MainWindow:
 
         self.root = master                  # main GUI context
         self.root.title("AudioWords")       # title of window
-        self.root.geometry("1210x500")       # size of GUI window
+        self.root.geometry("1280x500")       # size of GUI window
         self.main_frame = Frame(root)       # main frame into which all the Gui components will be placed
         self.main_frame.pack()              # pack() basically sets up/inserts the element (turns it on)
 
@@ -43,8 +43,12 @@ class MainWindow:
                                           command = self.export_regions)
 
         self.load_all_button = Button(self.main_frame,
-                                      text="Load All",
+                                      text="Load All (cex)",
                                       command=self.load_all)
+        # for the new clan format
+        self.load_all_cha_button = Button(self.main_frame,
+                                          text="Load All (cha)",
+                                          command=self.load_all_cha)
 
         self.load_clan_button = Button(self.main_frame,
                                        text = "Load CLAN",
@@ -95,9 +99,10 @@ class MainWindow:
         self.load_sound_button.grid(row=2, column=0)
         self.export_sound_button.grid(row=3, column=0)
         self.load_all_button.grid(row=2, column=1)
-        self.load_clan_button.grid(row=3, column=1)
-        self.export_clan_button.grid(row=4, column=1)
-        self.clear_clan_button.grid(row=5, column=1)
+        self.load_all_cha_button.grid(row=3, column=1)
+        self.load_clan_button.grid(row=4, column=1)
+        self.export_clan_button.grid(row=5, column=1)
+        self.clear_clan_button.grid(row=6, column=1)
         self.load_lena_button.grid(row=2, column=2)
         self.export_overlaps_button.grid(row=3, column=2)
         self.clear_lena_button.grid(row=4, column=2)
@@ -324,6 +329,69 @@ class MainWindow:
 
         self.export_overlaps(path=os.path.join(self.all_prefix, subregions_filename))
 
+    def load_all_cha(self):
+        """
+        Same principle as load_all(), but refactored to handle the new
+        CLAN file format
+
+        This is an all-in-one function that asks for the initial
+        CLAN file, and then figures out what the remaining files
+        need to be loaded and processed. It assumes that files will
+        be named in the following format:
+
+
+        16_08.cha     <- this is the file to be loaded.
+                         the rest will be loaded/generated automatically
+
+        16_08_silences.txt
+        16_08_lena5min.csv
+        16_08_silences_added.cha
+        16_08_subregions.cha
+
+        :return:
+        """
+        self.clan_formatting_error.grid_remove()
+        self.clan_file = tkFileDialog.askopenfilename()
+
+        if self.clan_file != "":
+            self.clan_loaded_label.grid(row=1, column=1)
+
+        # pull out the prefix for the path and the filename
+        #   e.g.
+        #       all_prefix  = /Users/ebergelson/Desktop/Github/SeedlingsBabylab/audiowords/data/input
+        #       file_prefix = 16_08
+        self.all_prefix = os.path.split(self.clan_file)[0]
+        self.file_prefix = os.path.split(self.clan_file)[1][0:5]
+
+        # print "clan file path: " + self.clan_file
+        # print "all prefix: " + self.all_prefix
+        # print "file prefix: " + self.file_prefix
+
+        labeled_track_filename = "Label_Track.txt"
+        silences_filename = self.file_prefix + "_silences.txt"
+
+        # Call load_regions with the Label_Track file
+        self.load_regions(path=os.path.join(self.all_prefix, labeled_track_filename))
+
+        self.export_regions_chain(os.path.join(self.all_prefix, silences_filename))
+
+        silences_added_filename = self.file_prefix + "_silences_added.cha"
+        silences_added_path = os.path.join(self.all_prefix, silences_added_filename)
+
+
+        self.export_clan_cha(path=silences_added_path)
+
+        self.clan_file = silences_added_path
+
+        lena_filename = self.file_prefix + "_lena5min.csv"
+
+        self.load_lena(path=os.path.join(self.all_prefix, lena_filename))
+
+        subregions_filename = self.file_prefix + "_subregions.cha"
+
+        self.export_overlaps_cha(path=os.path.join(self.all_prefix, subregions_filename))
+
+
     def load_clan(self):
         # get path for initial clan file to be processed,
         # and print a success label to the GUI
@@ -347,9 +415,31 @@ class MainWindow:
             ClanFileParser(self.clan_file, self.export_clan_file)\
                 .insert_silences(self.silence_parser.silences)
         except Exception, e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
             self.clan_loaded_label.grid_remove()
             self.clan_formatting_error.grid(row=1, column=1)
             print e.args
+            print(exc_type, exc_tb.tb_lineno)
+
+    def export_clan_cha(self, path=""):
+        # get path for new/modified clan file
+        if path == "":
+            self.export_clan_file = tkFileDialog.asksaveasfilename()
+        else:
+            self.export_clan_file = path
+        # We surround the ClanFileParser operations
+        # in a try: except: block because in some unlikely
+        # circumstances the clan file can be formatted incorrectly,
+        # requiring that we stop all operations and report the error.
+        try:
+            ClanFileParser(self.clan_file, self.export_clan_file)\
+                .insert_silences_cha(self.silence_parser.silences)
+        except Exception, e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            self.clan_loaded_label.grid_remove()
+            self.clan_formatting_error.grid(row=1, column=1)
+            print e.args
+            print(exc_type, exc_tb.tb_lineno)
 
     def clear_clan(self):
 
@@ -440,6 +530,25 @@ class MainWindow:
 
         ClanFileParser(self.clan_file, overlaps_export_file).\
                         insert_overlaps(self.overlaps.ranked_ctc_cvc,
+                                        self.overlaps.ctc_cvc_map, self.silence_parser.silences)
+
+    def export_overlaps_cha(self, path=""):
+        """
+        This gets called after the silences have been processed and
+        inserted into the clan file. The loaded clan file should be
+        this new one with the silences inserted. This function constructs
+        a ClanFileParser object, and immediately calls its insert_overlaps()
+        method (passing the ranked ctc_cvc offsets, their map, and the
+         silence regions from the previous silence inserting step.
+        :return:
+        """
+        if path == "":
+            overlaps_export_file = tkFileDialog.asksaveasfilename()
+        else:
+            overlaps_export_file = path
+
+        ClanFileParser(self.clan_file, overlaps_export_file).\
+                        insert_overlaps_cha(self.overlaps.ranked_ctc_cvc,
                                         self.overlaps.ctc_cvc_map, self.silence_parser.silences)
 
     def offset_to_hour(self, offset):

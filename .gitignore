@@ -5,3 +5,5 @@ data/export/
 .idea/
 *.DS_Store
 README.md
+*.its
+
