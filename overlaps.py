@@ -45,7 +45,7 @@ class Overlaps:
             reader.next() # skip past the header row
             for line in reader:
                 timestamp_split = line[10].split()
-                date = timestamp_split[0].split("-")
+                date = timestamp_split[0].split("/")
                 time = timestamp_split[1].split(":")
 
                 if visit_date is None:
@@ -391,5 +391,3 @@ class WordDensitySet:
         """
 
         return self.data[time]
-
-

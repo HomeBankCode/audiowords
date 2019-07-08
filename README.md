@@ -12,7 +12,7 @@ $ python audiowords.py
 
 ###new process
 
-1. Click "Load All" and select the main CLAN file (e.g 16_08.cex)
+1. Click "Load All" and select the main CLAN file (e.g 16_08.cha)
 
 
 
@@ -26,14 +26,14 @@ because some of the elements are still relevant (like working with audacity regi
 
 The format it's expecting files to be in:
 
-    16_08.cex
+    16_08.cha
     16_08_lena5min.csv
     Label_Track.txt
 
     16_08_silences.txt         <---////////////////////////////////////////
-    16_08_silences_added.cex   <--////////////////////////////////////////
+    16_08_silences_added.cha   <--////////////////////////////////////////
                                  // These will be output by audiowords //
-    16_08_subregions.cex     <--////////////////////////////////////////
+    16_08_subregions.cha     <--////////////////////////////////////////
 
 ###old process (still functional)
 

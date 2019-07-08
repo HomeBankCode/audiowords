@@ -77,12 +77,15 @@ class ClanFileParser:
 
                         # alter the ending timestamp to correspond to the beginning
                         # of the silence, and write the new line to the output file
-                        output.write(line.replace(interval_string,
-                                                  str(current_clan_interval[0]) + "_" +\
-                                                  str(int(curr_silence.start))) + "\n")
+                        # UPDATE 04/12/2018: NOT rewriting timestamps so commenting next line
+                        # output.write(line.replace(interval_string,
+                        #                           str(current_clan_interval[0]) + "_" +\
+                        #                           str(int(curr_silence.start))) + "\n")
 
                         # insert the comment immediately after the altered clan entry
+                        # UPDATE 04/12/2018: not adjusting anything
                         output.write("%com:\tsilence {} of {} starts at {} -- previous timestamp adjusted: was {}\n"
+                        # output.write("%com:\tsilence {} of {} starts at {}\n"
                                      .format(curr_silence.number,
                                              len(silences),
                                              curr_silence.start,
@@ -103,13 +106,15 @@ class ClanFileParser:
 
                         # We first alter the clan time interval to match the end of the
                         # silence we are about to insert, and write it to the output file
-
-                        output.write(line.replace(interval_string,
-                                                  str(current_clan_interval[0]) + "_" +\
-                                                  str(int(curr_silence.end))) + "\n")
+                        # UPDATE 04/12/2018 NOT rewriting timestamps so commenting next line
+                        # output.write(line.replace(interval_string,
+                        #                           str(current_clan_interval[0]) + "_" +\
+                        #                           str(int(curr_silence.end))) + "\n")
 
                         # then we write the end silence comment right afterwards
+                        # UPDATE 04/12/2018: not adjusting anything
                         output.write("%com:\tsilence {} of {} ends at {} -- previous timestamp adjusted: was {}\n"
+                        # output.write("%com:\tsilence {} of {} ends at {}\n"
                                      .format(curr_silence.number,
                                              len(silences),
                                              curr_silence.end,
@@ -243,22 +248,25 @@ class ClanFileParser:
                         # if "." is not in the line, then we're about to write a
                         # comment inside a multi-line entry. In this case, we need
                         # to insert this missing period so that CHECK doesn't fail.
-                        if "." not in line:
-                            new_line = line.replace("\025" + interval_string + "\025",
-                                                    ". \025{}_{}\025".format(current_clan_interval[0],
-                                                                             int(curr_silence.start)))
-                            output.write(new_line)
-
-                        else:
-                            output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
-                                                                                      int(curr_silence.start))))
-
+                        # UPDATE 04/12/2018 NOT rewriting timestamps
+                        # if "." not in line:
+                        #     new_line = line.replace("\025" + interval_string + "\025",
+                        #                             ". \025{}_{}\025".format(current_clan_interval[0],
+                        #                                                      int(curr_silence.start)))
+                        #     output.write(new_line)
+                        #
+                        # else:
+                        #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
+                        #                                                               int(curr_silence.start))))
+                        output.write(line)
                         if silence_1000_replaced:
                             output.write("%xcom:\tsilence comment rewrote interval to 0_1, rewriting to 0_1000\n")
                             silence_1000_replaced = False   # reset flag
 
                         # insert the comment immediately after the altered clan entry
+                        # UPDATE 04/12/2018 no adjusting
                         output.write("%xcom:\tsilence {} of {} starts at {} -- previous timestamp adjusted: was {}\n"
+                        # output.write("%xcom:\tsilence {} of {} starts at {}\n"
                                      .format(curr_silence.number,
                                              len(silences),
                                              curr_silence.start,
@@ -283,18 +291,21 @@ class ClanFileParser:
                         # if "." is not in the line, then we're about to write a
                         # comment inside a multi-line entry. In this case, we need
                         # to insert this missing period so that CHECK doesn't fail.
-                        if "." not in line:
-                            new_line = line.replace("\025" + interval_string + "\025",
-                                                    ". \025{}_{}\025".format(current_clan_interval[0],
-                                                                             int(curr_silence.end)))
-                            output.write(new_line)
-
-                        else:
-                            output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
-                                                                                      int(curr_silence.end))))
-
+                        # UPDATE 04/12/2018 NOT rewriting timestamps
+                        # if "." not in line:
+                        #     new_line = line.replace("\025" + interval_string + "\025",
+                        #                             ". \025{}_{}\025".format(current_clan_interval[0],
+                        #                                                      int(curr_silence.end)))
+                        #     output.write(new_line)
+                        #
+                        # else:
+                        #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
+                        #                                                               int(curr_silence.end))))
+                        output.write(line)
                         # then we write the end silence comment right afterwards
+                        # UPDATE
                         output.write("%xcom:\tsilence {} of {} ends at {} -- previous timestamp adjusted: was {}\n"
+                        # output.write("%xcom:\tsilence {} of {} ends at {}\n"
                                      .format(curr_silence.number,
                                              len(silences),
                                              curr_silence.end,
@@ -361,19 +372,22 @@ class ClanFileParser:
                         # if "." is not in the line, then we're about to write a
                         # comment inside a multi-line entry. In this case, we need
                         # to insert this missing period so that CHECK doesn't fail.
-                        if "." not in line:
-                            new_line = line.replace("\025" + interval_string + "\025",
-                                                    ". \025{}_{}\025".format(current_clan_interval[0],
-                                                                             int(curr_silence.start)))
-                            output.write(new_line)
+                        # UPDATE NOT rewriting ts
+                        # if "." not in line:
+                        #     new_line = line.replace("\025" + interval_string + "\025",
+                        #                             ". \025{}_{}\025".format(current_clan_interval[0],
+                        #                                                      int(curr_silence.start)))
+                        #     output.write(new_line)
+                        #
+                        # else:
+                        #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
+                        #                                                               int(curr_silence.start))))
 
-                        else:
-                            output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
-                                                                                      int(curr_silence.start))))
-
-
+                        output.write(line)
                         # insert the comment immediately after the altered clan entry
+                        # UPDATE no adjusting
                         output.write("%xcom:\tsilence {} of {} starts at {} -- previous timestamp adjusted: was {}\n"
+                        # output.write("%xcom:\tsilence {} of {} starts at {}\n"
                                      .format(curr_silence.number,
                                              len(silences),
                                              curr_silence.start,
@@ -398,18 +412,21 @@ class ClanFileParser:
                         # if "." is not in the line, then we're about to write a
                         # comment inside a multi-line entry. In this case, we need
                         # to insert this missing period so that CHECK doesn't fail.
-                        if "." not in line:
-                            new_line = line.replace("\025" + interval_string + "\025",
-                                                    ". \025{}_{}\025".format(current_clan_interval[0],
-                                                                             int(curr_silence.end)))
-                            output.write(new_line)
-
-                        else:
-                            output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
-                                                                                      int(curr_silence.end))))
-
+                        # UPDATE NOT rewriting ts
+                        # if "." not in line:
+                        #     new_line = line.replace("\025" + interval_string + "\025",
+                        #                             ". \025{}_{}\025".format(current_clan_interval[0],
+                        #                                                      int(curr_silence.end)))
+                        #     output.write(new_line)
+                        #
+                        # else:
+                        #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
+                        #                                                               int(curr_silence.end))))
+                        output.write(line)
                         # then we write the end silence comment right afterwards
+                        # UPDATE no adjusting
                         output.write("%xcom:\tsilence {} of {} ends at {} -- previous timestamp adjusted: was {}\n"
+                        # output.write("%xcom:\tsilence {} of {} ends at {}\n"
                                      .format(curr_silence.number,
                                              len(silences),
                                              curr_silence.end,
@@ -703,9 +720,9 @@ class ClanFileParser:
                             #print "region_start_in_silence: " + str(region_start_in_silence) + "     region_end_in_silence: " + str(region_end_in_silence) + "     region_contains_silence: " + str(region_contains_silence)
                             # We first alter the clan time interval to match the end of the
                             # silence we are about to insert, and write it to the output file
-                            output.write(line.replace(interval_string,
-                                                      str(current_clan_interval[0]) + "_" +\
-                                                      str(int(curr_region_end))) + "\n")
+                            # output.write(line.replace(interval_string,
+                            #                           str(current_clan_interval[0]) + "_" +\
+                            #                           str(int(curr_region_end))) + "\n")
 
                             if (curr_region == lowest_region):
                                 output.write("%com:\tsubregion {} of {} ends at {} -- previous timestamp adjusted: was {}. lowest ranked region; skip unless necessary\n"
@@ -924,18 +941,18 @@ class ClanFileParser:
                             # if "." is not in the line, then we're about to write a
                             # comment inside a multi-line entry. In this case, we need
                             # to insert this missing period so that CHECK doesn't fail.
-                            if "." not in line:
-                                new_line = line.replace("\025" + interval_string + "\025",
-                                                        ". \025{}_{}\025".format(current_clan_interval[0],
-                                                                                 int(curr_region_start)))
-                                output.write(new_line)
-
-                            else:
-                                output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
-                                                                                      int(curr_region_start))))
-
+                            # if "." not in line:
+                            #     new_line = line.replace("\025" + interval_string + "\025",
+                            #                             ". \025{}_{}\025".format(current_clan_interval[0],
+                            #                                                      int(curr_region_start)))
+                            #     output.write(new_line)
+                            #
+                            # else:
+                            #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
+                            #                                                           int(curr_region_start))))
+                            output.write(line)
                             if region_1000_replaced:
-                                output.write("%xcom:\tsubregion comment rewrote interval to 0_1, rewriting to {}_{}"\
+                                output.write("%xcom:\tsubregion comment rewrote interval to 0_1, rewriting to {}_{}\n"\
                                              .format(current_clan_interval[0], int(curr_region_start)))
                                 region_1000_replaced = False    # reset flag
 
@@ -976,16 +993,16 @@ class ClanFileParser:
                             # if "." is not in the line, then we're about to write a
                             # comment inside a multi-line entry. In this case, we need
                             # to insert this missing period so that CHECK doesn't fail.
-                            if "." not in line:
-                                new_line = line.replace("\025" + interval_string + "\025",
-                                                        ". \025{}_{}\025".format(current_clan_interval[0],
-                                                                                 int(curr_region_start)))
-                                output.write(new_line)
-
-                            else:
-                                output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
-                                                                                          int(curr_region_start))))
-
+                            # if "." not in line:
+                            #     new_line = line.replace("\025" + interval_string + "\025",
+                            #                             ". \025{}_{}\025".format(current_clan_interval[0],
+                            #                                                      int(curr_region_start)))
+                            #     output.write(new_line)
+                            #
+                            # else:
+                            #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
+                            #                                                               int(curr_region_start))))
+                            output.write(line)
                             if region_1000_replaced:
                                 output.write("%xcom:\tsubregion comment rewrote interval to 0_1, rewriting to {}_{}\n"\
                                              .format(current_clan_interval[0], int(curr_region_start)))
@@ -1030,16 +1047,16 @@ class ClanFileParser:
                             # if "." is not in the line, then we're about to write a
                             # comment inside a multi-line entry. In this case, we need
                             # to insert this missing period so that CHECK doesn't fail.
-                            if "." not in line:
-                                new_line = line.replace("\025" + interval_string + "\025",
-                                                        ". \025{}_{}\025".format(current_clan_interval[0],
-                                                                                 int(curr_region_end)))
-                                output.write(new_line)
-
-                            else:
-                                output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
-                                                                                          int(curr_region_end))))
-
+                            # if "." not in line:
+                            #     new_line = line.replace("\025" + interval_string + "\025",
+                            #                             ". \025{}_{}\025".format(current_clan_interval[0],
+                            #                                                      int(curr_region_end)))
+                            #     output.write(new_line)
+                            #
+                            # else:
+                            #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
+                            #                                                               int(curr_region_end))))
+                            output.write(line)
 
                             if curr_region == lowest_region:
                                 output.write("%xcom:\tsubregion {} of {}   (ranked {} of {})  ends at {} -- previous timestamp adjusted: was {} - lowest ranked region; [contains silent region: [{}, {}] ]\n"
@@ -1097,16 +1114,16 @@ class ClanFileParser:
                             # if "." is not in the line, then we're about to write a
                             # comment inside a multi-line entry. In this case, we need
                             # to insert this missing period so that CHECK doesn't fail.
-                            if "." not in line:
-                                new_line = line.replace("\025" + interval_string + "\025",
-                                                        ". \025{}_{}\025".format(current_clan_interval[0],
-                                                                                 int(curr_region_end)))
-                                output.write(new_line)
-
-                            else:
-                                output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
-                                                                                          int(curr_region_end))))
-
+                            # if "." not in line:
+                            #     new_line = line.replace("\025" + interval_string + "\025",
+                            #                             ". \025{}_{}\025".format(current_clan_interval[0],
+                            #                                                      int(curr_region_end)))
+                            #     output.write(new_line)
+                            #
+                            # else:
+                            #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
+                            #                                                               int(curr_region_end))))
+                            output.write(line)
 
                             if (curr_region == lowest_region):
                                 output.write("%xcom:\tsubregion {} of {}   (ranked {} of {})  ends at {} -- previous timestamp adjusted: was {}. lowest ranked region; skip unless necessary\n"
@@ -1211,15 +1228,17 @@ class ClanFileParser:
                             # if "." is not in the line, then we're about to write a
                             # comment inside a multi-line entry. In this case, we need
                             # to insert this missing period so that CHECK doesn't fail.
-                            if "." not in line:
-                                new_line = line.replace("\025" + interval_string + "\025",
-                                                        ". \025{}_{}\025".format(current_clan_interval[0],
-                                                                                 int(curr_region_start)))
-                                output.write(new_line)
-
-                            else:
-                                output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
-                                                                                          int(curr_region_start))))
+                            # if "." not in line:
+                            #     new_line = line.replace("\025" + interval_string + "\025",
+                            #                             ". \025{}_{}\025".format(current_clan_interval[0],
+                            #                                                      int(curr_region_start)))
+                            #     output.write(new_line)
+                            #
+                            # else:
+                            #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
+                            #
+                            #                                                           int(curr_region_start))))
+                            output.write(line)
                             if (curr_region == lowest_region):
                                 output.write("%xcom:\tsubregion {} of {}   (ranked {} of {})  starts at {} -- previous timestamp adjusted: was {} - lowest ranked region; [contains silent region: [{}, {}] ]\n"
                                                 .format(region_number,
@@ -1256,16 +1275,16 @@ class ClanFileParser:
                             # if "." is not in the line, then we're about to write a
                             # comment inside a multi-line entry. In this case, we need
                             # to insert this missing period so that CHECK doesn't fail.
-                            if "." not in line:
-                                new_line = line.replace("\025" + interval_string + "\025",
-                                                        ". \025{}_{}\025".format(current_clan_interval[0],
-                                                                                 int(curr_region_start)))
-                                output.write(new_line)
-
-                            else:
-                                output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
-                                                                                          int(curr_region_start))))
-
+                            # if "." not in line:
+                            #     new_line = line.replace("\025" + interval_string + "\025",
+                            #                             ". \025{}_{}\025".format(current_clan_interval[0],
+                            #                                                      int(curr_region_start)))
+                            #     output.write(new_line)
+                            #
+                            # else:
+                            #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
+                            #                                                               int(curr_region_start))))
+                            output.write(line)
                             if (curr_region == lowest_region):
                                 output.write("%xcom:\tsubregion {} of {}   (ranked {} of {})  starts at {} -- previous timestamp adjusted: was {}. lowest ranked region; skip unless necessary\n"
                                                 .format(region_number,
@@ -1303,16 +1322,16 @@ class ClanFileParser:
                             # if "." is not in the line, then we're about to write a
                             # comment inside a multi-line entry. In this case, we need
                             # to insert this missing period so that CHECK doesn't fail.
-                            if "." not in line:
-                                new_line = line.replace("\025" + interval_string + "\025",
-                                                        ". \025{}_{}\025".format(current_clan_interval[0],
-                                                                                 int(curr_region_end)))
-                                output.write(new_line)
-
-                            else:
-                                output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
-                                                                                          int(curr_region_end))))
-
+                            # if "." not in line:
+                            #     new_line = line.replace("\025" + interval_string + "\025",
+                            #                             ". \025{}_{}\025".format(current_clan_interval[0],
+                            #                                                      int(curr_region_end)))
+                            #     output.write(new_line)
+                            #
+                            # else:
+                            #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
+                            #                                                               int(curr_region_end))))
+                            output.write(line)
                             if curr_region == lowest_region:
                                 output.write("%xcom:\tsubregion {} of {}   (ranked {} of {})  ends at {} -- previous timestamp adjusted: was {} - lowest ranked region; [contains silent region: [{}, {}] ]\n"
                                                 .format(region_number,
@@ -1369,16 +1388,16 @@ class ClanFileParser:
                             # if "." is not in the line, then we're about to write a
                             # comment inside a multi-line entry. In this case, we need
                             # to insert this missing period so that CHECK doesn't fail.
-                            if "." not in line:
-                                new_line = line.replace("\025" + interval_string + "\025",
-                                                        ". \025{}_{}\025".format(current_clan_interval[0],
-                                                                                 int(curr_region_end)))
-                                output.write(new_line)
-
-                            else:
-                                output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
-                                                                                          int(curr_region_end))))
-
+                            # if "." not in line:
+                            #     new_line = line.replace("\025" + interval_string + "\025",
+                            #                             ". \025{}_{}\025".format(current_clan_interval[0],
+                            #                                                      int(curr_region_end)))
+                            #     output.write(new_line)
+                            #
+                            # else:
+                            #     output.write(line.replace(interval_string, "{}_{}".format(current_clan_interval[0],
+                            #                                                               int(curr_region_end))))
+                            output.write(line)
                             if (curr_region == lowest_region):
                                 output.write("%xcom:\tsubregion {} of {}   (ranked {} of {})  ends at {} -- previous timestamp adjusted: was {}. lowest ranked region; skip unless necessary\n"
                                                 .format(region_number,
